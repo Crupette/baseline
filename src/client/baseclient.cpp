@@ -12,6 +12,7 @@ std::unique_ptr<Window> BaseClient::window_;
 
 void BaseClient::init(int w, int h, int x, int y, const std::string &title, int flags){
     SDL_Init(SDL_INIT_EVERYTHING);
+
     window_ = std::make_unique<Window>(w, h, x, y, title, flags);
 
     glewExperimental = true;
