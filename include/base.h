@@ -3,7 +3,9 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include <unordered_map>
+#include "client/window.h"
 
 namespace baseline {
 
@@ -15,6 +17,10 @@ class Base {
     typedef void (*tickHook)();
     static std::vector<tickHook> tickHooks_;
     static Screen *currentScreen_;
+
+#ifndef SERVERSIDE
+    static std::unique_ptr<Window> window_;
+#endif
 
     static bool running_;
     static bool side_;

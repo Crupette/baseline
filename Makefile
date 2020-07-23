@@ -8,7 +8,6 @@ OUT			:= libbaseline.a
 
 CC			:= g++
 
-LIBS		:= -lSDL2 -lGL -lGLEW
 CFLAGS		:= -Wall -Wpedantic
 
 SERVERSIDE	= 0
