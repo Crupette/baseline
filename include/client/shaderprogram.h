@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include <GL/glew.h>
 
@@ -17,6 +18,7 @@ struct Shader {
 class ShaderProgram {
     GLuint program_;
     std::vector<GLuint> compiledShaders_;
+    std::unordered_map<std::string, GLuint> uniforms_;
     bool linked_;
 public:
     ShaderProgram();
@@ -26,6 +28,8 @@ public:
     void link();
 
     void use() { glUseProgram(program_); }
+
+    GLuint getUniform(const std::string &name);
 };
 
 }

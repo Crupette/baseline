@@ -4,7 +4,7 @@
 namespace baseline {
 
 MeshRaw::MeshRaw(const std::vector<float> &positions) : 
-    Mesh(MESH_POSITIONS, positions.size()) {
+    Mesh(MESH_POSITIONS, positions.size(), 0) {
     glGenBuffers(1, &vbo_);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo_);

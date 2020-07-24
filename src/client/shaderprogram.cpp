@@ -11,6 +11,9 @@ ShaderProgram::ShaderProgram() : program_(0), linked_(false){
 
 ShaderProgram::~ShaderProgram(){
     glDeleteProgram(program_);
+    for(GLuint id : compiledShaders_){
+        glDeleteShader(id);
+    }
 }
 
 void ShaderProgram::addShader(Shader shader){
@@ -68,5 +71,15 @@ void ShaderProgram::link(){
         glDetachShader(program_, id);
     }
 }
+
+GLuint ShaderProgram::getUniform(const std::string &name){
+    auto it = uniforms_.find(name);
+    if(it == uniforms_.end()){
+        uniforms_.emplace(name, glGetUniformLocation(program_, name.c_str()));
+        return uniforms_.at(name);
+    }
+    return it->second;
+}
+
 
 }
