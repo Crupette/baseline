@@ -11,11 +11,15 @@ namespace baseline {
 class Camera {
     glm::mat4 view_;
     glm::mat4 projection_;
+
+    float nearplane_;
+    float farplane_;
+    float fov_;
 public:
     glm::vec3 position;
     glm::vec3 rotation;
 
-    Camera(const glm::vec3 &position, const glm::vec3 &rotation, const glm::ivec2 windim, float near, float far, float fov);
+    Camera(const glm::vec3 &position, const glm::vec3 &rotation, float near, float far, float fov);
     ~Camera();
 
     void update(ShaderProgram *program);

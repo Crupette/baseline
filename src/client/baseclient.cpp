@@ -8,12 +8,12 @@
 
 namespace baseline {
 
-std::unique_ptr<Window> BaseClient::window_;
+std::unique_ptr<Window> BaseClient::window;
 
 void BaseClient::init(int w, int h, int x, int y, const std::string &title, int flags){
     SDL_Init(SDL_INIT_EVERYTHING);
 
-    window_ = std::make_unique<Window>(w, h, x, y, title, flags);
+    window = std::make_unique<Window>(w, h, x, y, title, flags);
 
     glewExperimental = true;
     GLenum success = glewInit();
@@ -41,9 +41,24 @@ void BaseClient::tick(){
             case SDL_KEYUP:
                 InputManager::releaseKey(evnt.key.keysym.sym);
             break;
+            case SDL_MOUSEMOTION:
+                if(SDL_GetRelativeMouseMode()){
+                    InputManager::moveMouse(evnt.motion.xrel, evnt.motion.yrel);
+                }else{
+                     InputManager::moveMouse(evnt.motion.x, evnt.motion.y);
+                }
+            break;
+            case SDL_MOUSEWHEEL:
+                InputManager::scrollMouse(evnt.wheel.x, evnt.wheel.y);
+            break;
+            case SDL_WINDOWEVENT:
+                if(evnt.window.event == SDL_WINDOWEVENT_RESIZED){
+                    window->resizeEvent(evnt.window.data1, evnt.window.data2);
+                }
+            break;
         }
     }
-    window_->swapBuffer();
+    window->swapBuffer();
 }
 
 }

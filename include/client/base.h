@@ -9,8 +9,9 @@
 namespace baseline {
 
 class BaseClient {
-    static std::unique_ptr<Window> window_;
 public:
+    static std::unique_ptr<Window> window;
+
     static void init(int w, int h, int x, int y, const std::string &title, int flags);
     static void tick();
 };

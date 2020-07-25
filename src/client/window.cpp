@@ -12,6 +12,7 @@ Window::Window(int w, int h, int x, int y, const std::string &title, int flg){
     }
 
     context_ = SDL_GL_CreateContext(window_);
+    size_ = glm::ivec2(w, h);
 }
 
 Window::~Window(){
@@ -21,6 +22,12 @@ Window::~Window(){
 
 void Window::swapBuffer(){
     SDL_GL_SwapWindow(window_);
+}
+
+void Window::resizeEvent(int x, int y){
+    size_ = glm::ivec2(x, y);
+    SDL_SetWindowSize(window_, x, y);
+    glViewport(0, 0, x, y);
 }
 
 }
