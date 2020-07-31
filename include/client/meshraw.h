@@ -7,11 +7,13 @@
 
 namespace baseline {
 
-class MeshRaw : public Mesh {
-    GLuint vbo_;
+class MeshRaw : public Mesh<1> {
+    int vertCount_;
 public:
     MeshRaw(const std::vector<float> &positions);
-    ~MeshRaw();
+    ~MeshRaw() {}
+
+    virtual int getVertexCount();
 };
 
 }

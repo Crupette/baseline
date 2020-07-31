@@ -1,21 +1,20 @@
 #include "client/meshraw.h"
 
+#include <cstdio>
 
 namespace baseline {
 
-MeshRaw::MeshRaw(const std::vector<float> &positions) : 
-    Mesh(MESH_POSITIONS, positions.size(), 0) {
-    glGenBuffers(1, &vbo_);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-    glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(float), positions.data(), GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+MeshRaw::MeshRaw(const std::vector<float> &positions) 
+    : Mesh(
+            std::vector<AttribDescriptor> {
+                {3, GL_FLOAT, false}
+            },
+            positions) {
+    vertCount_ = positions.size();
 }
 
-MeshRaw::~MeshRaw(){
-    glDeleteBuffers(1, &vbo_);
+int MeshRaw::getVertexCount(){
+    return vertCount_;
 }
 
 }

@@ -25,6 +25,11 @@ void BaseClient::init(int w, int h, int x, int y, const std::string &title, int 
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+    glEnable(GL_CULL_FACE);
 }
 
 void BaseClient::tick(){

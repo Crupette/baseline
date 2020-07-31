@@ -4,7 +4,7 @@
 
 namespace baseline {
 
-RenderObject::RenderObject(const glm::vec3 &position, const glm::vec3 &rotation, const glm::vec3 &scale, Mesh *mesh) :
+RenderObject::RenderObject(const glm::vec3 &position, const glm::vec3 &rotation, const glm::vec3 &scale, Mesh<> *mesh) :
             transform_(1), update_(true), position_(position), rotation_(rotation), scale_(scale), mesh_(mesh){
 
 }
@@ -13,7 +13,7 @@ RenderObject::~RenderObject(){
 
 }
 
-void RenderObject::render(ShaderProgram *program, Camera *camera){
+void RenderObject::render(ShaderProgram *program){
     program->use();
 
     if(update_){
@@ -27,11 +27,7 @@ void RenderObject::render(ShaderProgram *program, Camera *camera){
     glUniformMatrix4fv(program->getUniform("transformationMatrix"), 1, GL_FALSE, &(transform_[0][0]));
 
     mesh_->useVao();
-    if(mesh_->getType() & MESH_INDEXED){
-        
-    }else{
-        glDrawArrays(GL_TRIANGLES, 0, mesh_->getVertexCount());
-    }
+    glDrawArrays(GL_TRIANGLES, 0, mesh_->getVertexCount());
 }
 
 }

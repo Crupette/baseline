@@ -16,12 +16,12 @@ class RenderObject {
 
     glm::vec3 position_, rotation_, scale_;
 
-    Mesh *mesh_;
+    Mesh<> *mesh_;
 public:
-    RenderObject(const glm::vec3 &position, const glm::vec3 &rotation, const glm::vec3 &scale, Mesh *mesh);
+    RenderObject(const glm::vec3 &position, const glm::vec3 &rotation, const glm::vec3 &scale, Mesh<> *mesh);
     ~RenderObject();
 
-    void render(ShaderProgram *program, Camera *camera);
+    void render(ShaderProgram *program);
 
     glm::vec3 getPosition() { return position_; }
     glm::vec3 getRotation() { return rotation_; }

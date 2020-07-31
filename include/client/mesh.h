@@ -2,38 +2,54 @@
 #define MESH_H 1
 #ifndef SERVERSIDE
 
+#include <vector>
+#include <cstdio>
+
 #include <GL/glew.h>
 
 namespace baseline {
 
-#define MESH_POSITIONS  0x1
-#define MESH_COLORS     0x2
-#define MESH_TEXTURES   0x4
-#define MESH_NORMALS    0x8
-#define MESH_INDEXED    0x10
+struct AttribDescriptor {
+    unsigned char elementCount;
+    GLenum dt;
+    bool normalize;
+};
 
+template<int N=1>
 class Mesh {
-    uint8_t type_ = 0;
-    GLuint vao_ = 0;
-    size_t vertexCount_ = 0;
-    size_t indexCount_ = 0;
+protected:
+    GLuint vao_;
+    GLuint vbo_[N];
+
+    //TODO: Figure out how to pass vector by reference
+    template<typename T>
+    void addVBO(int attr, const AttribDescriptor &descriptor, std::vector<T> data){
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_[attr]);
+        glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(T), data.data(), GL_STATIC_DRAW);
+
+        glEnableVertexAttribArray(attr);
+        glVertexAttribPointer(attr, descriptor.elementCount, descriptor.dt, descriptor.normalize, 0, NULL);
+    }
 public:
-    //Creates a new blank VAO object and binds it.
-    Mesh(uint8_t type, size_t vertexCount, size_t indexCount) :
-        type_(type),
-        vertexCount_(vertexCount),
-        indexCount_(indexCount){
+    template<typename ...Ts>
+    Mesh(std::vector<AttribDescriptor> descriptors, Ts (&...data)){
         glGenVertexArrays(1, &vao_);
         glBindVertexArray(vao_);
-    }
-    ~Mesh(){
-        glDeleteVertexArrays(1, &vao_);
+
+        glGenBuffers(N, vbo_);
+
+        for(int i = 0; i < N; i++){
+            addVBO(i, descriptors[i], data...);
+        }
     }
 
-    void useVao() { glBindVertexArray(vao_); }
-    size_t getVertexCount() { return vertexCount_; }
-    size_t getIndexCount() { return indexCount_; }
-    uint8_t getType() { return type_; }
+    ~Mesh(){
+        glDeleteVertexArrays(1, &vao_);
+        glDeleteBuffers(N, vbo_);
+    }
+
+    void useVao(){ glBindVertexArray(vao_); }
+    virtual int getVertexCount() = 0;
 };
 
 }
