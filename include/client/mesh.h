@@ -17,6 +17,7 @@ struct AttribDescriptor {
 
 template<int N=1>
 class Mesh {
+    int next_attrib_ = 0;
 protected:
     GLuint vao_;
     GLuint vbo_[N];
@@ -29,6 +30,8 @@ protected:
 
         glEnableVertexAttribArray(attr);
         glVertexAttribPointer(attr, descriptor.elementCount, descriptor.dt, descriptor.normalize, 0, NULL);
+
+        next_attrib_++;
     }
 public:
     template<typename ...Ts>
@@ -38,9 +41,7 @@ public:
 
         glGenBuffers(N, vbo_);
 
-        for(int i = 0; i < N; i++){
-            addVBO(i, descriptors[i], data...);
-        }
+        ((addVBO(next_attrib_, descriptors[next_attrib_], data)), ...);
     }
 
     ~Mesh(){

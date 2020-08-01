@@ -8,7 +8,7 @@ OUT			:= libbaseline.a
 
 CC			:= g++
 
-CFLAGS		:= -Wall -Wpedantic
+CFLAGS		:= -Wall -Wpedantic -std=c++17
 
 SERVERSIDE	= 0
 ifeq ($(SERVERSIDE),1)
