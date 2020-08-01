@@ -11,10 +11,11 @@ std::unordered_map<std::string, Screen*> Base::screens_;
 std::vector<void (*)()> Base::tickHooks_;
 Screen *Base::currentScreen_ = nullptr;
 
-
 bool Base::running_ = true;
 bool Base::side_ = false;   //False is client-side, true is server side
 int Base::return_ = 0;
+
+Timer Base::frametimer;
 
 int Base::init(int width, int height, int x, int y, const std::string &title, int flags, Screen *screen){
     currentScreen_ = screen;
@@ -22,7 +23,9 @@ int Base::init(int width, int height, int x, int y, const std::string &title, in
 #ifdef SERVERSIDE
     side_ = true;
 #else
-    BaseClient::init(width, height, x, y, title, flags);
+    if(side_ == false){
+        BaseClient::init(width, height, x, y, title, flags);
+    }
 #endif
 
     screen->init();
@@ -46,6 +49,7 @@ void Base::kill(int reason){
 
 void Base::gameLoop(){
     while(running_){
+        frametimer.start();
         if(side_){
             currentScreen_->tickServer();
         }else{
@@ -57,6 +61,7 @@ void Base::gameLoop(){
         for(tickHook hook : tickHooks_){
             hook();
         }
+        frametimer.stop();
     }
 }
 

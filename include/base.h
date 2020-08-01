@@ -6,6 +6,8 @@
 #include <memory>
 #include <unordered_map>
 
+#include "timer.h"
+
 namespace baseline {
 
 class Screen;
@@ -23,6 +25,8 @@ class Base {
 
     static void gameLoop();
 public:
+    static Timer frametimer;
+
     static int init(int width, int height, int x, int y, const std::string &title, int flags, Screen *screen);
     static void fini();
 
@@ -36,6 +40,7 @@ public:
     static void addTickHook(tickHook hook);
 
     static bool getSide() { return side_; }
+    static void setSide(bool side) { side_ = side; }
 };
 
 }
